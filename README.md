@@ -6,6 +6,13 @@ This library enables you to retrieve live measurements form your own Do-It-Yours
 
 **Please see the examples provided as reference on how to use this library.**
 
+For PlatformIO users it is reccommended to use the commands 
+```
+cp examples/GetLiveValues/GetLiveValues.ino examples/GetLiveValues/GetLiveValues.cpp
+pio run -e GetLiveValues -t upload && pio device monitor
+```
+from the root directory of this library to build, flash and monitor the example.
+
 ### Recommended Hardware
 
 This project was developed and tested on Espressif [ESP32 DevKitC](https://www.espressif.com/en/products/devkits/esp32-devkitc) hardware (see e.g. [ESP32-DevKitC-32D](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32D/9356990))

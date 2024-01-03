@@ -7,13 +7,13 @@
 #ifndef ARDUINO_BLE_SENSISCAN_SAMPLEDECODER_H
 #define ARDUINO_BLE_SENSISCAN_SAMPLEDECODER_H
 
-#include "Sample.h"
+#include "Sensirion_UPT_Core.h"
 #include <string>
 #include <vector>
 
 namespace SampleDecoder {
-uint8_t decode(uint8_t sampleType, std::string data,
-               std::vector<Sample>& samples);
+uint8_t decode(uint8_t sampleType, std::string deviceName, std::string data,
+               std::vector<DataPoint>& samples);
 
 // Helpers
 float decodeSimple(std::string data, uint8_t offset);

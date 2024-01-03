@@ -31,7 +31,7 @@ void NimBleClient::setupAndStartBleScans() {
 
     // create new scan
     _bleScan = NimBLEDevice::getScan();
-    _bleScan->setAdvertisedDeviceCallbacks(this, false);
+    _bleScan->setAdvertisedDeviceCallbacks(this, true);
     // Set active scanning, this will get more data from the advertiser.
     _bleScan->setActiveScan(true);
     // How often the scan occurs / switches channels; in milliseconds,

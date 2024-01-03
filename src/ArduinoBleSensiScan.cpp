@@ -16,9 +16,17 @@ void SensiScan::begin() {
 }
 
 void SensiScan::getScanResults(
-    std::map<Gadget, std::vector<Sample>>& scanResults) {
-    // TODO: Copy properly
-    scanResults = _sampleCache;
+    std::map<Gadget, std::vector<DataPoint>>& scanResults) {
+    // Deep copy cachedScanResult into scanResults
+    for (const auto& cachedScanResult : _dataPointCache) {
+        std::vector<DataPoint> dpVect;
+        for (const auto& dp : cachedScanResult.second) {
+            // DataPoint does not have a copy ctor nor assigment operator
+            dpVect.push_back(DataPoint(dp.signalType, dp.value, dp.timeStamp,
+                                       dp.sourceDevice));
+        }
+        scanResults[cachedScanResult.first] = dpVect;
+    }
 }
 
 void SensiScan::keepAlive() {
@@ -38,13 +46,13 @@ void SensiScan::onAdvertisementReceived(std::string address, std::string name,
 
     Gadget gadget = {deviceId, name};
 
-    std::vector<Sample> samples;
-    uint8_t error = SampleDecoder::decode(sampleType, data, samples);
+    std::vector<DataPoint> samples;
+    uint8_t error = SampleDecoder::decode(sampleType, name, data, samples);
     if (error) {
         return;
     }
 
-    _sampleCache[gadget] = samples;
+    _dataPointCache[gadget] = samples;
 }
 
 std::string SensiScan::getDeviceId(std::string data) {

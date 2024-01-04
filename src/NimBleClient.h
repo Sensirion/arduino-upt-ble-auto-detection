@@ -12,6 +12,7 @@
 
 class NimBleClient: public BleClient, public NimBLEAdvertisedDeviceCallbacks {
   public:
+    NimBleClient() : _bleScan(nullptr), _callback(nullptr){};
     void begin(BleClientCallback* callback) override;
     void keepAlive() override;
 

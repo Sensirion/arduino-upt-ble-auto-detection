@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include "ArduinoBleSensiScan.h"
+#include <Arduino.h>
 
 SensiScan sensiScan = SensiScan();
 
@@ -12,7 +12,8 @@ void setup() {
     sensiScan.begin();
 }
 
-void printScanResults(std::map<Gadget, std::vector<DataPoint>> &scanResults) {
+void printScanResults(
+    const std::map<uint16_t, std::vector<DataPoint>>& scanResults) {
     if (scanResults.empty()) {
         Serial.printf("No data available.\n");
         return;
@@ -20,17 +21,21 @@ void printScanResults(std::map<Gadget, std::vector<DataPoint>> &scanResults) {
 
     Serial.println("New Scan Results:");
     for (const auto& item : scanResults) {
-        Gadget gadget = item.first;
-        Serial.printf(" - %s Gadget with Id: %s \n", gadget.name.c_str(), gadget.deviceId.c_str());
-        for (int i = 0; i < item.second.size(); i++) {
-            Serial.printf("\t- %s ->\t%f \t@%i\n", quantityOf(item.second[i].signalType), item.second[i].value, item.second[i].timeStamp);
+        uint16_t deviceId = item.first;
+        uint8_t lowByte = deviceId & 0xFF;
+        uint8_t highByte = (deviceId >> 8) & 0xFF;
+        Serial.printf(" - %s Gadget with Id: %x:%x \n",
+                      item.second[0].sourceDevice, highByte, lowByte);
+        for (const auto& dp : item.second) {
+            Serial.printf("\t- %s ->\t%f \t@%i\n", quantityOf(dp.signalType),
+                          dp.value, dp.timeStamp);
         }
     }
     Serial.println();
 }
 
 void loop() {
-    std::map<Gadget, std::vector<DataPoint>> scanResults;
+    std::map<uint16_t, std::vector<DataPoint>> scanResults;
     delay(1000);
 
     sensiScan.getScanResults(scanResults);

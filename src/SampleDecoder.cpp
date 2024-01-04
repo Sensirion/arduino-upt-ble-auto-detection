@@ -8,7 +8,7 @@
 #include "Arduino.h"
 #include <map>
 
-typedef float (*tdecodeer)(std::string, uint8_t);
+typedef float (*tdecodeer)(const std::string&, uint8_t);
 
 struct UnitEncoding {
     SignalType signalType;
@@ -269,8 +269,8 @@ SampleEncoding getEncoding(uint8_t sampleType) {
     }
 }
 
-uint8_t SampleDecoder::decode(uint8_t sampleType, std::string deviceName,
-                              std::string data,
+uint8_t SampleDecoder::decode(uint8_t sampleType, const std::string& deviceName,
+                              const std::string& data,
                               std::vector<DataPoint>& samples) {
     SampleEncoding encoding = getEncoding(sampleType);
     if (data.length() < encoding.minFrameSize) {
@@ -289,42 +289,43 @@ uint8_t SampleDecoder::decode(uint8_t sampleType, std::string deviceName,
     return 0;
 }
 
-float SampleDecoder::decodeSimple(std::string data, uint8_t offset) {
+float SampleDecoder::decodeSimple(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return static_cast<float>(value);
 }
 
-float SampleDecoder::decodeTemperatureV1(std::string data, uint8_t offset) {
+float SampleDecoder::decodeTemperatureV1(const std::string& data,
+                                         uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return -45.0f + ((175.0f * static_cast<float>(value)) / 65535);
 }
 
-float SampleDecoder::decodeHumidityV1(std::string data, uint8_t offset) {
+float SampleDecoder::decodeHumidityV1(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return (100.0f * static_cast<float>(value)) / 65535;
 }
 
-float SampleDecoder::decodeHumidityV2(std::string data, uint8_t offset) {
+float SampleDecoder::decodeHumidityV2(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return (125.0f * static_cast<float>(value)) / 65535 - 6.0f;
 }
 
-float SampleDecoder::decodePM2p5V1(std::string data, uint8_t offset) {
+float SampleDecoder::decodePM2p5V1(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return (1000.0f * static_cast<float>(value)) / 65535;
 }
 
-float SampleDecoder::decodePMV2(std::string data, uint8_t offset) {
+float SampleDecoder::decodePMV2(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return static_cast<float>(value) / 10.0f;
 }
 
-float SampleDecoder::decodeHCHOV1(std::string data, uint8_t offset) {
+float SampleDecoder::decodeHCHOV1(const std::string& data, uint8_t offset) {
     uint16_t value = getRawValue(data, offset);
     return static_cast<float>(value) / 5.0f;
 }
 
-uint16_t SampleDecoder::getRawValue(std::string data, uint8_t offset) {
+uint16_t SampleDecoder::getRawValue(const std::string& data, uint8_t offset) {
     return static_cast<uint16_t>(static_cast<uint16_t>(data[offset + 1]) << 8 |
                                  static_cast<uint8_t>(data[offset]));
 }

@@ -16,15 +16,17 @@ void SensiScan::begin() {
 }
 
 void SensiScan::getScanResults(
-    std::map<Gadget, std::vector<DataPoint>>& scanResults) {
+    std::map<uint16_t, std::vector<DataPoint>>& scanResults) const {
     // Deep copy cachedScanResult into scanResults
     for (const auto& cachedScanResult : _dataPointCache) {
         std::vector<DataPoint> dpVect;
-        for (const auto& dp : cachedScanResult.second) {
-            // DataPoint does not have a copy ctor nor assigment operator
-            dpVect.push_back(DataPoint(dp.signalType, dp.value, dp.timeStamp,
-                                       dp.sourceDevice));
-        }
+        std::transform(cachedScanResult.second.begin(),
+                       cachedScanResult.second.end(),
+                       std::back_inserter(dpVect), [](const DataPoint& dp) {
+                           // DataPoint lacks a copy ctor or assignment operator
+                           return DataPoint(dp.signalType, dp.value,
+                                            dp.timeStamp, dp.sourceDevice);
+                       });
         scanResults[cachedScanResult.first] = dpVect;
     }
 }
@@ -40,11 +42,8 @@ void SensiScan::onAdvertisementReceived(std::string address, std::string name,
         return;
     }
 
-    uint8_t advType = (uint8_t)data[2];
     uint8_t sampleType = (uint8_t)data[3];
-    std::string deviceId = getDeviceId(data);
-
-    Gadget gadget = {deviceId, name};
+    uint16_t deviceId = getDeviceId(data);
 
     std::vector<DataPoint> samples;
     uint8_t error = SampleDecoder::decode(sampleType, name, data, samples);
@@ -52,12 +51,13 @@ void SensiScan::onAdvertisementReceived(std::string address, std::string name,
         return;
     }
 
-    _dataPointCache[gadget] = samples;
+    _dataPointCache[deviceId] = samples;
 }
 
-std::string SensiScan::getDeviceId(std::string data) {
-    char id[6];
-    sprintf(id, "%02x:%02x", (uint8_t)data[4], (uint8_t)data[5]);
-    std::string deviceId(id);
+/**
+ * @brief last two digits of MAC address uniquely define a device
+ */
+uint16_t SensiScan::getDeviceId(const std::string& data) {
+    uint16_t deviceId = (uint16_t)data[4] << 8 | (uint16_t)data[5];
     return deviceId;
 }

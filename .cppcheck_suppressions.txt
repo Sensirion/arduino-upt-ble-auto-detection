@@ -1,0 +1,2 @@
+unusedStructMember:src/SampleDecoder.cpp
+passedByValue:src/ArduinoBleSensiScan.cpp

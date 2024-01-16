@@ -16,7 +16,7 @@ void SensiScan::begin() {
 }
 
 void SensiScan::getScanResults(
-    std::map<uint16_t, std::vector<DataPoint>>& scanResults) const {
+    std::map<uint16_t, std::vector<DataPoint>>& scanResults) {
     // Deep copy cachedScanResult into scanResults
     for (const auto& cachedScanResult : _dataPointCache) {
         std::vector<DataPoint> dpVect;
@@ -29,6 +29,7 @@ void SensiScan::getScanResults(
                        });
         scanResults[cachedScanResult.first] = dpVect;
     }
+    _dataPointCache.clear();
 }
 
 void SensiScan::keepAlive() {

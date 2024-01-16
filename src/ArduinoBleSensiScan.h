@@ -20,8 +20,8 @@ class SensiScan: public BleClientCallback {
     explicit SensiScan() : _bleClient(nullptr){};
 
     void begin();
-    void getScanResults(
-        std::map<uint16_t, std::vector<DataPoint>>& scanResults) const;
+    void
+    getScanResults(std::map<uint16_t, std::vector<DataPoint>>& scanResults);
     void keepAlive();
 
   private:

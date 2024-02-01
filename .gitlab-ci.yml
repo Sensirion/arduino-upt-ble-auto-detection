@@ -7,8 +7,6 @@ compile_pio:
   image:
       name: registry.gitlab.sensirion.lokal/sensirion/docker/docker-arduino:0.6.0
   tags: [docker, linux]
-  before_script:
-    - cp examples/GetLiveValues/GetLiveValues.ino examples/GetLiveValues/GetLiveValues.cpp
   parallel:
     matrix:
       - env: [GetLiveValues, develop]

@@ -1,11 +1,11 @@
 #include "ArduinoBleSensiScan.h"
 #include <Arduino.h>
 
-void example_printMeasurement(const Measurement& measurement);
+void printMeasurement(const Measurement& measurement);
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
-std::string example_arrayifyDeviceID(uint64_t deviceID);
-void example_printMACAddess(const std::string& macAddress);
+std::string arrayifyDeviceID(uint64_t deviceID);
+void printMACAddess(const std::string& macAddress);
 
 SensiScan sensiScan = SensiScan();
 
@@ -50,13 +50,13 @@ void printScanResults(
     // Show obtained measurements
     for (const auto& item : scanResults) {
         for (const auto& measurement : item.second) {
-            example_printMeasurement(measurement);
+            printMeasurement(measurement);
         }
     }
     Serial.println("--------------------------------------");
 }
 
-void example_printMeasurement(const Measurement& measurement) {
+void printMeasurement(const Measurement& measurement) {
     // Get device and platform descriptive labels
     const char* platformLbl = devicePlatformLabel(
         measurement.metaData.platform, measurement.metaData.deviceType);
@@ -103,25 +103,23 @@ void example_printMeasurement(const Measurement& measurement) {
     Serial.printf("  Metadata:\n");
     Serial.printf("    Platform:\t\t%s\n", platformLbl);
     Serial.printf("    deviceID:\t\t");
-    example_printMACAddess(
-        example_arrayifyDeviceID(measurement.metaData.deviceID));
+    printMACAddess(arrayifyDeviceID(measurement.metaData.deviceID));
     Serial.println();
     Serial.printf("    Device Type:\t%s\n\n", deviceLbl);
 
     return;
 }
 
-std::string example_arrayifyDeviceID(uint64_t deviceID) {
+std::string arrayifyDeviceID(uint64_t deviceID) {
     std::string address;
-    /* Commented out to not fail CI, this function is removed in next MR */
-    // for (int s = 5; s > -1; s--) {
-    //     address[s] = static_cast<uint8_t>(deviceID);
-    //     deviceID = deviceID >> 8;
-    // }
+    for (int s = 5; s > -1; s--) {
+        address[s] = static_cast<uint8_t>(deviceID);
+        deviceID = deviceID >> 8;
+    }
     return address;
 }
 
-void example_printMACAddess(const std::string& macAddress) {
+void printMACAddess(const std::string& macAddress) {
     for (int i = 0; i < 5; i++) {
         Serial.printf("%X:", macAddress[i]);
     }

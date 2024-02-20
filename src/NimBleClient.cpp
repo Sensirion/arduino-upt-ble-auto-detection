@@ -48,9 +48,17 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
         return;
     }
 
-    std::string address = advertisedDevice->getAddress().toString();
-    std::string name =
-        advertisedDevice->haveName() ? advertisedDevice->getName() : "No Name";
+    // MAC address contains 6 bytes of MAC address (in reversed order)
+    // (Note: advertisedDevice->getAddress().toString() seems broken)
+    const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
+    std::string address;
+    for (int i = 5; i >= 0; i--) {
+        address.push_back(bleMACAddress[i]);
+    }
+
+    std::string name = advertisedDevice->haveName()
+                           ? advertisedDevice->getName()
+                           : "UNDEFINED";
     std::string manufacturerData = advertisedDevice->getManufacturerData();
 
     _callback->onAdvertisementReceived(address, name, manufacturerData);

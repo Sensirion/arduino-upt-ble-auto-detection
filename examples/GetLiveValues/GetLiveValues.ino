@@ -1,11 +1,9 @@
-#include "ArduinoBleSensiScan.h"
+#include "Sensirion_upt_ble_auto_detection.h"
 #include <Arduino.h>
 
 void printMeasurement(const Measurement& measurement);
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
-std::string arrayifyDeviceID(uint64_t deviceID);
-void printMACAddess(const std::string& macAddress);
 
 SensiScan sensiScan = SensiScan();
 

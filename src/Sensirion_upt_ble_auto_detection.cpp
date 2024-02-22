@@ -1,4 +1,4 @@
-#include "ArduinoBleSensiScan.h"
+#include "Sensirion_upt_ble_auto_detection.h"
 #include "NimBleClient.h"
 
 const int COMPANY_ID_FILTER = 54534;

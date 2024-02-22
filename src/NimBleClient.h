@@ -1,5 +1,5 @@
-#ifndef ARDUINO_BLE_SENSISCAN_NIMBLECLIENT_H
-#define ARDUINO_BLE_SENSISCAN_NIMBLECLIENT_H
+#ifndef _SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLECLIENT_H
+#define _SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLECLIENT_H
 
 #include "BleClient.h"
 #include "NimBLEDevice.h"
@@ -17,4 +17,4 @@ class NimBleClient: public BleClient, public NimBLEAdvertisedDeviceCallbacks {
     void onResult(NimBLEAdvertisedDevice* advertisedDevice);
 };
 
-#endif // ARDUINO_BLE_SENSISCAN_NIMBLECLIENT_H
+#endif /* _SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLECLIENT_H */

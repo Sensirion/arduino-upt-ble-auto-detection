@@ -1,7 +1,6 @@
 #include "Sensirion_upt_ble_auto_detection.h"
 #include <Arduino.h>
 
-void printMeasurement(const Measurement& measurement);
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
 

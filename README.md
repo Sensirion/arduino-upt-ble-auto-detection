@@ -19,3 +19,7 @@ This project was developed and tested on Espressif [ESP32 DevKitC](https://www.e
 ## License
 
 See [LICENSE](LICENSE.txt).
+
+## Credits
+
+https://github.com/MBjoern/arduino-ble-sensiscan

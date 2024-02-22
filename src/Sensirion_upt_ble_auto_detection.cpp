@@ -1,10 +1,4 @@
-/*
- ArduinoBleSensiScan.cpp - Library for collecting sensor data via Bluetooth.
- Created by Bjoern Muntwyler, 2021.
- Released under BSD-3 licence
- */
-
-#include "ArduinoBleSensiScan.h"
+#include "Sensirion_upt_ble_auto_detection.h"
 #include "NimBleClient.h"
 
 const int COMPANY_ID_FILTER = 54534;

@@ -1,11 +1,5 @@
-/*
- BleClient.h
- Created by Bjoern Muntwyler, 2021.
- Released under BSD-3 licence
- */
-
-#ifndef ARDUINO_BLE_SENSISCAN_BLECLIENT_H
-#define ARDUINO_BLE_SENSISCAN_BLECLIENT_H
+#ifndef _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENT_H
+#define _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENT_H
 
 #include "Arduino.h"
 #include "BleClientCallback.h"
@@ -19,4 +13,4 @@ class BleClient {
     virtual void keepAlive() = 0;
 };
 
-#endif // ARDUINO_BLE_SENSISCAN_BLECLIENT_H
+#endif /* _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENT_H */

@@ -1,11 +1,5 @@
-/*
- BleClientCallback.h
- Created by Bjoern Muntwyler, 2021.
- Released under BSD-3 licence
- */
-
-#ifndef ARDUINO_BLE_SENSISCAN_BLECLIENTCALLBACK_H
-#define ARDUINO_BLE_SENSISCAN_BLECLIENTCALLBACK_H
+#ifndef _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H
+#define _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H
 
 class BleClientCallback {
   public:
@@ -16,4 +10,4 @@ class BleClientCallback {
                                          std::string data);
 };
 
-#endif // ARDUINO_BLE_SENSISCAN_BLECLIENTCALLBACK_H
+#endif /* _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H */

@@ -1,9 +1,3 @@
-/*
- NimBleClient.cpp
- Created by Bjoern Muntwyler, 2021.
- Released under BSD-3 licence
- */
-
 #include "NimBleClient.h"
 
 void NimBleClient::begin(BleClientCallback* callback) {

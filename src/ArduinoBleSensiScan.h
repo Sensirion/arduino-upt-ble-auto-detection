@@ -1,9 +1,3 @@
-/*
- ArduinoBleSensiScan.h - Library for collecting sensor data via Bluetooth.
- Created by Bjoern Muntwyler, 2021.
- Released under BSD-3 licence
- */
-
 #ifndef ARDUINO_BLE_SENSISCAN_H
 #define ARDUINO_BLE_SENSISCAN_H
 

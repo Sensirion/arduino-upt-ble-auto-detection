@@ -74,7 +74,7 @@ In case you're using some other board, it is recommended you create a new enviro
 
 ## License
 
-See [LICENSE](LICENSE.txt).
+See [LICENSE](LICENSE).
 
 ## Credits
 

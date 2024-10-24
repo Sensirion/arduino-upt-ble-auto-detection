@@ -15,7 +15,8 @@ class __attribute__((unused)) NimBleClient
   private:
     NimBLEScan* _bleScan;
     BleClientCallback* _callback;
-    void setupAndStartBleScans();
+    void setupBleScans();
+    void startBleScans();
     void onResult(NimBLEAdvertisedDevice* advertisedDevice) override;
 };
 

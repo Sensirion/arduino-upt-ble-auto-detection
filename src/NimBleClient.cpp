@@ -2,7 +2,8 @@
 
 void NimBleClient::begin(BleClientCallback* callback) {
     _callback = callback;
-    setupAndStartBleScans();
+    setupBleScans();
+    startBleScans();
 }
 
 void NimBleClient::keepAlive() {
@@ -10,11 +11,33 @@ void NimBleClient::keepAlive() {
     if (!_bleScan->isScanning()) {
         // Start scan with: duration = 0 seconds(forever), no scan end callback,
         // not a continuation of a previous scan.
-        _bleScan->start(0, nullptr, false);
+        startBleScans();
     }
 }
 
-void NimBleClient::setupAndStartBleScans() {
+
+void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
+    if (!advertisedDevice->haveManufacturerData()) {
+        return;
+    }
+
+    // MAC address contains 6 bytes of MAC address (in reversed order)
+    // (Note: advertisedDevice->getAddress().toString() seems broken)
+    const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
+    std::string address;
+    for (int i = 5; i >= 0; i--) {
+        address.push_back(static_cast<char>(bleMACAddress[i]));
+    }
+
+    std::string name = advertisedDevice->haveName()
+                           ? advertisedDevice->getName()
+                           : "UNDEFINED";
+    std::string manufacturerData = advertisedDevice->getManufacturerData();
+
+    _callback->onAdvertisementReceived(address, name, manufacturerData);
+}
+
+void NimBleClient::setupBleScans() {
     // CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE (2)
     // Filter by address and data, advertisements from the same address will be
     // reported only once, except if the data in the advertisement has changed,
@@ -37,23 +60,8 @@ void NimBleClient::setupAndStartBleScans() {
     _bleScan->setMaxResults(0);
 }
 
-void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
-    if (!advertisedDevice->haveManufacturerData()) {
-        return;
-    }
-
-    // MAC address contains 6 bytes of MAC address (in reversed order)
-    // (Note: advertisedDevice->getAddress().toString() seems broken)
-    const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
-    std::string address;
-    for (int i = 5; i >= 0; i--) {
-        address.push_back(static_cast<char>(bleMACAddress[i]));
-    }
-
-    std::string name = advertisedDevice->haveName()
-                           ? advertisedDevice->getName()
-                           : "UNDEFINED";
-    std::string manufacturerData = advertisedDevice->getManufacturerData();
-
-    _callback->onAdvertisementReceived(address, name, manufacturerData);
+void NimBleClient::startBleScans() {
+    // Start scan with: duration = 0 seconds(forever), no scan end callback,
+    // not a continuation of a previous scan.
+    _bleScan->start(0, nullptr, false);
 }

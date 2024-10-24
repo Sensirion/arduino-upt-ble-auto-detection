@@ -6,7 +6,6 @@ const int COMPANY_ID_FILTER = 54534;
 void SensiScan::begin() {
     _bleClient = new NimBleClient();
     _bleClient->begin(this);
-    _bleClient->keepAlive();
 }
 
 __attribute__((unused)) void SensiScan::getScanResults(

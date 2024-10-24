@@ -20,9 +20,8 @@ class __attribute__((unused)) SensiScan: public BleClientCallback {
   private:
     BleClient* _bleClient;
     std::map<uint16_t, std::vector<Measurement>> _sampleCache;
-    void onAdvertisementReceived(std::string address, std::string name,
+    void onAdvertisementReceived(uint64_t address, std::string name,
                                  std::string data) override;
-    static uint64_t squashMACAddress(const std::string& macAddressString);
     static uint16_t getDeviceId(const std::string& data);
     static uint8_t decodeData(const MetaData& metaData, const std::string& data,
                               std::vector<Measurement>& samples);

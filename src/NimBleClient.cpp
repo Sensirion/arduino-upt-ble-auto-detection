@@ -1,8 +1,23 @@
 #include "NimBleClient.h"
 
+NimBleClient::NimBleClient() : _callback(nullptr) {
+    // CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE (2)
+    // Filter by address and data, advertisements from the same address will be
+    // reported only once, except if the data in the advertisement has changed,
+    // then it will be reported again.
+    NimBLEDevice::setScanFilterMode(CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE);
+    NimBLEDevice::setScanDuplicateCacheSize(200);
+    NimBLEDevice::init("");
+    _bleScan = NimBLEDevice::getScan();
+    setupBleScans();
+}
+
+NimBleClient::~NimBleClient() {
+    _bleScan->stop();
+}
+
 void NimBleClient::begin(BleClientCallback* callback) {
     _callback = callback;
-    setupBleScans();
     startBleScans();
 }
 
@@ -15,18 +30,18 @@ void NimBleClient::keepAlive() {
     }
 }
 
-
 void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     if (!advertisedDevice->haveManufacturerData()) {
         return;
     }
 
     // MAC address contains 6 bytes of MAC address (in reversed order)
-    // (Note: advertisedDevice->getAddress().toString() seems broken)
     const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
-    std::string address;
-    for (int i = 5; i >= 0; i--) {
-        address.push_back(static_cast<char>(bleMACAddress[i]));
+    uint64_t address = 0;
+    size_t address_size = 6;
+    // reverse MAC address and store it as 64-bit unsigned int
+    for (int ix = 0; ix < address_size; ix++) {
+        address = (address << 8) | bleMACAddress[address_size - 1 - ix];
     }
 
     std::string name = advertisedDevice->haveName()
@@ -38,16 +53,6 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
 }
 
 void NimBleClient::setupBleScans() {
-    // CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE (2)
-    // Filter by address and data, advertisements from the same address will be
-    // reported only once, except if the data in the advertisement has changed,
-    // then it will be reported again.
-    NimBLEDevice::setScanFilterMode(CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE);
-    NimBLEDevice::setScanDuplicateCacheSize(200);
-    NimBLEDevice::init("");
-
-    // create new scan
-    _bleScan = NimBLEDevice::getScan();
     // Activate callback on advertisement update
     _bleScan->setAdvertisedDeviceCallbacks(this, true);
     // Set active scanning, this will get more data from the advertiser.

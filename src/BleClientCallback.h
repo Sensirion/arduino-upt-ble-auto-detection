@@ -5,7 +5,7 @@ class BleClientCallback {
   public:
     virtual ~BleClientCallback() = default;
 
-    virtual void onAdvertisementReceived(std::string address, std::string name,
+    virtual void onAdvertisementReceived(uint64_t address, std::string name,
                                          std::string data) = 0;
 };
 

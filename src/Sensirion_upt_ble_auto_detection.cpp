@@ -9,15 +9,15 @@ void SensiScan::begin() {
     _bleClient->keepAlive();
 }
 
-void SensiScan::getScanResults(
+__attribute__((unused)) void SensiScan::getScanResults(
     std::map<uint16_t, std::vector<Measurement>>& scanResults) {
     for (const auto& cachedSample : _sampleCache) {
-        scanResults[cachedSample.first] = _sampleCache[cachedSample.first];
+        scanResults[cachedSample.first] = cachedSample.second;
     }
     _sampleCache.clear();
 }
 
-void SensiScan::keepAlive() {
+__attribute__((unused)) void SensiScan::keepAlive() {
     _bleClient->keepAlive();
 }
 
@@ -45,7 +45,7 @@ void SensiScan::onAdvertisementReceived(const std::string address,
         return;
     }
 
-    // Last two digits of MAC addr. suffice to uniquely ID a BLE device
+    // Last two digits of MAC addr. Suffice to uniquely ID a BLE device
     _sampleCache[getDeviceId(data)] = samples;
 }
 
@@ -55,7 +55,7 @@ void SensiScan::onAdvertisementReceived(const std::string address,
  */
 uint64_t SensiScan::squashMACAddress(const std::string& macAddressString) {
 
-    uint64_t deviceID = macAddressString[0];
+    uint64_t deviceID = static_cast<unsigned char>(macAddressString[0]);
     for (size_t i = 1; i < 6; i++) {
         deviceID = (deviceID << 8) | macAddressString[i];
     }
@@ -71,8 +71,6 @@ uint16_t SensiScan::getDeviceId(const std::string& data) {
     return deviceId;
 }
 
-extern std::map<DataType, SampleConfig> sampleConfigSelector;
-
 /**
  * @brief decode chunk of Advertisement containing encoded samples
  *
@@ -81,7 +79,7 @@ extern std::map<DataType, SampleConfig> sampleConfigSelector;
  */
 uint8_t SensiScan::decodeData(const MetaData& metaData, const std::string& data,
                               std::vector<Measurement>& samples) {
-    uint8_t sampleType = static_cast<uint8_t>(data[3]);
+    auto sampleType = static_cast<uint8_t>(data[3]);
 
     DataType dataType = getDataTypeFromSampleType(sampleType);
     SampleConfig sampleConfig = sampleConfigSelector[dataType];

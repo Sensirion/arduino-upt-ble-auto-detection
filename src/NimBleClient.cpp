@@ -3,11 +3,11 @@
 void NimBleClient::begin(BleClientCallback* callback) {
     _callback = callback;
     setupAndStartBleScans();
-};
+}
 
 void NimBleClient::keepAlive() {
     // If an error occurs that stops the scan, it will be restarted here.
-    if (_bleScan->isScanning() == false) {
+    if (!_bleScan->isScanning()) {
         // Start scan with: duration = 0 seconds(forever), no scan end callback,
         // not a continuation of a previous scan.
         _bleScan->start(0, nullptr, false);
@@ -47,7 +47,7 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
     std::string address;
     for (int i = 5; i >= 0; i--) {
-        address.push_back(bleMACAddress[i]);
+        address.push_back(static_cast<char>(bleMACAddress[i]));
     }
 
     std::string name = advertisedDevice->haveName()
@@ -56,4 +56,4 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     std::string manufacturerData = advertisedDevice->getManufacturerData();
 
     _callback->onAdvertisementReceived(address, name, manufacturerData);
-};
+}

@@ -15,11 +15,14 @@ void setup() {
 
 void loop() {
     std::map<uint16_t, std::vector<Measurement>> scanResults;
+
     delay(1000);
 
     sensiScan.getScanResults(scanResults);
-
     printScanResults(scanResults);
+
+    // ensure scanning is restarted in case of errors.
+    sensiScan.keepAlive();
 }
 
 void printScanResults(

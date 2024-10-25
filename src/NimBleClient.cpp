@@ -50,6 +50,9 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     std::string manufacturerData = advertisedDevice->getManufacturerData();
 
     _callback->onAdvertisementReceived(address, name, manufacturerData);
+
+    // clear NIMBle scan results to avoid memory leak.
+    _bleScan->clearResults();
 }
 
 void NimBleClient::setupBleScans() {

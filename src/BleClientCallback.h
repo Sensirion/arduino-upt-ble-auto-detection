@@ -1,13 +1,12 @@
-#ifndef _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H
-#define _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H
+#ifndef SENSIRION_UPT_BLE_AUTO_DETECTION_BLE_CLIENT_CALLBACK_H
+#define SENSIRION_UPT_BLE_AUTO_DETECTION_BLE_CLIENT_CALLBACK_H
 
 class BleClientCallback {
   public:
-    virtual ~BleClientCallback() {
-    }
+    virtual ~BleClientCallback() = default;
 
-    virtual void onAdvertisementReceived(std::string address, std::string name,
-                                         std::string data);
+    virtual void onAdvertisementReceived(uint64_t address, std::string name,
+                                         std::string data) = 0;
 };
 
-#endif /* _SENSIRION_UPT_BLE_AUTO_DETECTION_BLECLIENTCALLBACK_H */
+#endif /* SENSIRION_UPT_BLE_AUTO_DETECTION_BLE_CLIENT_CALLBACK_H */

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use unit64_t for address (device id) instead of std::string
 - Fix several clang tidy issues
 - Update example to call keepAlive regularly. This ensures scanning does not stop due to errors.
+- Fixed detection of 'Sensirion MyCO2' gadgets.
 
 ## [0.1.0] 
 ### Added

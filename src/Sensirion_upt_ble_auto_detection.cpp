@@ -58,17 +58,31 @@ uint16_t SensiScan::getDeviceId(const std::string& data) {
  * @brief decode chunk of Advertisement containing encoded samples
  *
  * @returns 0 on success
- *          1 if the Frame is too short or if the SampleType is unknown
+ *          1 if the SampleType is unknown
+ *          2 if the received data length is too short for the sample type
  */
 uint8_t SensiScan::decodeData(const MetaData& metaData, const std::string& data,
                               std::vector<Measurement>& samples) {
     auto sampleType = static_cast<uint8_t>(data[3]);
 
     DataType dataType = getDataTypeFromSampleType(sampleType);
-    SampleConfig sampleConfig = sampleConfigSelector[dataType];
+    std::map<DataType, SampleConfig>::iterator sampleConfigIt = sampleConfigSelector.find(dataType);
 
-    if (data.length() < 6 + sampleConfig.sampleSizeBytes) {
-        return 1; // Frame too short or no config found
+    if (sampleConfigIt == sampleConfigSelector.end()) {
+        return 1; // No config found for data type
+    }
+
+    SampleConfig sampleConfig = sampleConfigIt->second;
+
+    if (data.length() < 6 + sampleConfig.sampleSizeBytes ) {
+        /*
+        NOTE: Here we ignore frames that are too short for T_RH_CO2_ALT data types 
+        because the MyCO2 gadget is actually not sending the 2 reserved Bytes (ALT)
+        */
+       bool is_a_myco2_gadget = metaData.deviceType.bleGadgetType == BLEGadgetType::MYCO2 && data.length() == 6 + sampleConfig.sampleSizeBytes - 2;
+       if (! is_a_myco2_gadget){
+            return 2; // Frame too short 
+       }
     }
 
     unsigned long timestamp = millis();

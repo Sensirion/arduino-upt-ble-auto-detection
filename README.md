@@ -1,4 +1,5 @@
 # Arduino Sensirion UPT BLE Auto Detection
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/sensirion/library/Sensirion%20UPT%20BLE%20Auto%20Detection.svg)](https://registry.platformio.org/libraries/sensirion/Sensirion%20UPT%20BLE%20Auto%20Detection) [![arduino-library-badge](https://www.ardu-badge.com/badge/Sensirion%20UPT%20BLE%20Auto%20Detection.svg?)](https://www.ardu-badge.com/Sensirion%20UPT%20BLE%20Auto%20Detection)
 
 This library enables you to retrieve live measurements form your own Do-It-Yourself BLE enabled sensor gadget or most Sensirion Gadgets on the ESP32 platform.
 

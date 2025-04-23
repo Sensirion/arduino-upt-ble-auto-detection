@@ -12,11 +12,9 @@ This library enables you to retrieve live measurements form your own Do-It-Yours
 - SHT43 Gadget
 - [DIY BLE Gadget](https://github.com/Sensirion/arduino-ble-gadget)
 
-### Key features are
+## How to use
 
 **Please see [the example provided as reference](examples/GetLiveValues/GetLiveValues.ino) on how to use this library.**
-
-## How to use
 
 ### Recommended Hardware
 
@@ -82,6 +80,9 @@ pio device monitor
 ```
 
 In case you're using some other board, it is recommended you create a new environment in the `platformio.ini` file, using the existing environment as a template. Find your `board` parameter [here](https://docs.platformio.org/en/latest/boards/index.html).
+
+## Sensirion BLE Specification
+To learn more about the BLE *Services* and *Characteristics* used by Sensirion devices, please refer to [the dedicated documentation page.](https://sensirion.github.io/ble-services/)
 
 ## License
 

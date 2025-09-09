@@ -3,7 +3,7 @@ name: Arduino Library
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   Arduino-Checks:
@@ -11,3 +11,5 @@ jobs:
     with:
       expect-arduino-examples: true
       lint-lib-manager-check: update
+      fqbn-list: "['esp32:esp32:esp32']" 
+      dependency-list: "[{'name': 'Sensirion UPT Core', 'version': '0.8.0'}, {'name': 'NimBLE-Arduino', version: '1.4.3'},  {'source-path': './'}]"

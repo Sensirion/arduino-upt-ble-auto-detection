@@ -1,6 +1,9 @@
 #include "Sensirion_upt_ble_auto_detection.h"
 #include <Arduino.h>
 
+using namespace sensirion::upt::core;
+using namespace sensirion::upt::ble_auto_detection;
+
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
 
@@ -46,13 +49,14 @@ void printScanResults(
         uint8_t highByte = (deviceId >> 8) & 0xFF;
 
         const char* deviceLbl =
-            bleGadgetLabel(item.second[0].metaData.deviceType.bleGadgetType);
+            deviceLabel(item.second[0].metaData.deviceType);
         Serial.printf(" - %s Gadget with Id: %X:%X\n", deviceLbl, highByte,
                       lowByte);
     }
     Serial.println("--------------------------------------");
 
     // Show obtained measurements
+    
     for (const auto& item : scanResults) {
         for (const auto& measurement : item.second) {
             printMeasurement(measurement);

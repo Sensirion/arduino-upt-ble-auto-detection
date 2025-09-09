@@ -7,24 +7,26 @@
 #include <map>
 #include <string>
 #include <vector>
+namespace sensirion::upt::ble_auto_detection{
 
 class __attribute__((unused)) SensiScan: public BleClientCallback {
   public:
     explicit SensiScan() : _bleClient(nullptr) {};
 
     void begin();
-    __attribute__((unused)) void
-    getScanResults(std::map<uint16_t, std::vector<Measurement>>& scanResults);
-    __attribute__((unused)) void keepAlive();
+    [[maybe_unused]] void
+    getScanResults(std::map<uint16_t, std::vector<core::Measurement>>& scanResults);
+    [[maybe_unused]] void keepAlive();
 
   private:
     BleClient* _bleClient;
-    std::map<uint16_t, std::vector<Measurement>> _sampleCache;
+    std::map<uint16_t, std::vector<core::Measurement>> _sampleCache;
     void onAdvertisementReceived(uint64_t address, std::string name,
                                  std::string data) override;
     static uint16_t getDeviceId(const std::string& data);
-    static uint8_t decodeData(const MetaData& metaData, const std::string& data,
-                              std::vector<Measurement>& samples);
+    static uint8_t decodeData(const core::MetaData& metaData, const std::string& data,
+                              std::vector<core::Measurement>& samples);
 };
+} // end namespace ensirion::upt::ble_auto_detection
 
 #endif /* SENSIRION_UPT_BLE_AUTO_DETECTION_H */

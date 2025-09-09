@@ -1,5 +1,6 @@
 #include "NimBleClient.h"
 
+namespace sensirion::upt::ble_auto_detection{
 NimBleClient::NimBleClient() : _callback(nullptr) {
     // CONFIG_BTDM_SCAN_DUPL_TYPE_DATA_DEVICE (2)
     // Filter by address and data, advertisements from the same address will be
@@ -39,6 +40,7 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
     uint64_t address = 0;
     size_t address_size = 6;
+   
     // reverse MAC address and store it as 64-bit unsigned int
     for (int ix = 0; ix < address_size; ix++) {
         address = (address << 8) | bleMACAddress[address_size - 1 - ix];
@@ -47,6 +49,7 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     std::string name = advertisedDevice->haveName()
                            ? advertisedDevice->getName()
                            : "UNDEFINED";
+
     std::string manufacturerData = advertisedDevice->getManufacturerData();
 
     _callback->onAdvertisementReceived(address, name, manufacturerData);
@@ -73,3 +76,4 @@ void NimBleClient::startBleScans() {
     // not a continuation of a previous scan.
     _bleScan->start(0, nullptr, false);
 }
+} // end namespace sensirion::upt::ble_auto_detection

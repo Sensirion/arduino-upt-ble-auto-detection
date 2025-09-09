@@ -4,7 +4,9 @@
 #include "BleClient.h"
 #include "NimBLEDevice.h"
 
-class __attribute__((unused)) NimBleClient
+namespace sensirion::upt::ble_auto_detection{
+
+class NimBleClient
     : public BleClient,
       public NimBLEAdvertisedDeviceCallbacks {
   public:
@@ -12,6 +14,7 @@ class __attribute__((unused)) NimBleClient
     ~NimBleClient();
     void begin(BleClientCallback* callback) override;
     void keepAlive() override;
+    NimBleClient& operator=(NimBleClient&& other) = delete;
 
   private:
     NimBLEScan* _bleScan;
@@ -20,5 +23,5 @@ class __attribute__((unused)) NimBleClient
     void startBleScans();
     void onResult(NimBLEAdvertisedDevice* advertisedDevice) override;
 };
-
+} // end namespace sensirion::upt::ble_auto_detection
 #endif /* SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLE_CLIENT_H */

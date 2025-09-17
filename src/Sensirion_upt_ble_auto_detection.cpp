@@ -6,7 +6,7 @@ namespace sensirion::upt::ble_auto_detection{
 
 const int COMPANY_ID_FILTER = 54534;
 
-void SensiScan::begin() {
+void SensirionBleScanner::begin() {
     // these are the known device types that might be
     // detected!
     core::MYCO2();
@@ -16,11 +16,12 @@ void SensiScan::begin() {
     core::BLE_DIY_GADGET();
     core::HUMI_GADGET();
 
+    core::InitSampleConfigurationMapping();
     _bleClient = new NimBleClient();
     _bleClient->begin(this);
 }
 
-__attribute__((unused)) void SensiScan::getScanResults(
+[[maybe_unused]] void SensirionBleScanner::getSamplesFromScanResults(
     std::map<uint16_t, std::vector<core::Measurement>>& scanResults) {
     for (const auto& cachedSample : _sampleCache) {
         scanResults[cachedSample.first] = cachedSample.second;
@@ -28,11 +29,11 @@ __attribute__((unused)) void SensiScan::getScanResults(
     _sampleCache.clear();
 }
 
-__attribute__((unused)) void SensiScan::keepAlive() {
+[[maybe_unused]] void SensirionBleScanner::keepAlive() {
     _bleClient->keepAlive();
 }
 
-void SensiScan::onAdvertisementReceived(uint64_t address, std::string name,
+void SensirionBleScanner::onAdvertisementReceived(uint64_t address, std::string name,
                                         std::string data) {
     uint16_t companyId = (uint16_t)data[0] << 8 | (uint8_t)data[1];
     if (companyId != COMPANY_ID_FILTER) {
@@ -63,7 +64,7 @@ void SensiScan::onAdvertisementReceived(uint64_t address, std::string name,
 /**
  * @brief last two digits of MAC address uniquely define a device
  */
-uint16_t SensiScan::getDeviceId(const std::string& data) {
+uint16_t SensirionBleScanner::getDeviceId(const std::string& data) {
     uint16_t deviceId = (uint16_t)data[4] << 8 | (uint16_t)data[5];
     return deviceId;
 }
@@ -75,7 +76,7 @@ uint16_t SensiScan::getDeviceId(const std::string& data) {
  *          1 if the SampleType is unknown
  *          2 if the received data length is too short for the sample type
  */
-uint8_t SensiScan::decodeData(const core::MetaData& metaData, const std::string& data,
+uint8_t SensirionBleScanner::decodeData(const core::MetaData& metaData, const std::string& data,
                               std::vector<core::Measurement>& samples) {
     auto sampleType = static_cast<uint8_t>(data[3]);
                             

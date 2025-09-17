@@ -10,8 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Use c++17
 - Fix library versions
+
 ### Changed
 - Define namespace
+- Upgraded NimBLE to 2.x
+- Bumped UPT core to 0.9.3
+- Renamed `SensiScan` to `SensirionBleScanner`
+- Updated usage example
 
 ## [0.2.0] 
 ### Fixed

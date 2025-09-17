@@ -7,31 +7,31 @@ using namespace sensirion::upt::ble_auto_detection;
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
 
-SensiScan sensiScan = SensiScan();
+SensirionBleScanner bleScanner = SensirionBleScanner();
+std::map<uint16_t, std::vector<Measurement>> lastBleScanSamples;
 
 void setup() {
     Serial.begin(115200);
     delay(1000); // Wait for serial connection
 
-    sensiScan.begin();
+    bleScanner.begin();
 }
 
 void loop() {
-    std::map<uint16_t, std::vector<Measurement>> scanResults;
-
     delay(1000);
 
-    sensiScan.getScanResults(scanResults);
-    printScanResults(scanResults);
+    bleScanner.getSamplesFromScanResults(lastBleScanSamples);
+    printScanResults(lastBleScanSamples);
+    lastBleScanSamples.clear();
 
     // ensure scanning is restarted in case of errors.
-    sensiScan.keepAlive();
+    bleScanner.keepAlive();
 }
 
 void printScanResults(
-    const std::map<uint16_t, std::vector<Measurement>>& scanResults) {
-    if (scanResults.empty()) {
-        Serial.printf("No data available.\n");
+    const std::map<uint16_t, std::vector<Measurement>>& bleScanSamples) {
+    if (bleScanSamples.empty()) {
+        Serial.printf("No new sample received.\n");
         return;
     }
 
@@ -42,8 +42,8 @@ void printScanResults(
      * broadcasting the Advertisement. The key should match the last two bytes
      * of the MAC address. */
     Serial.println("======================================");
-    Serial.println("New Scan Results:");
-    for (const auto& item : scanResults) {
+    Serial.printf("%i new samples from scan results:\n", bleScanSamples.size());
+    for (const auto& item : bleScanSamples) {
         uint16_t deviceId = item.first;
         uint8_t lowByte = deviceId & 0xFF;
         uint8_t highByte = (deviceId >> 8) & 0xFF;
@@ -57,7 +57,7 @@ void printScanResults(
 
     // Show obtained measurements
     
-    for (const auto& item : scanResults) {
+    for (const auto& item : bleScanSamples) {
         for (const auto& measurement : item.second) {
             printMeasurement(measurement);
         }

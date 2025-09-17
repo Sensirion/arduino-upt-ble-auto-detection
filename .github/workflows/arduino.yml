@@ -11,5 +11,4 @@ jobs:
     with:
       expect-arduino-examples: true
       lint-lib-manager-check: update
-      fqbn-list: "['esp32:esp32:esp32']" 
-      dependency-list: "[{'name': 'Sensirion UPT Core', 'version': '0.8.0'}, {'name': 'NimBLE-Arduino', version: '1.4.3'},  {'source-path': './'}]"
+      dependency-list: "[{'name': 'Sensirion UPT Core', 'version': '0.9.4'}, {'name': 'NimBLE-Arduino', version: '2.3.6'},  {'source-path': './'}]"

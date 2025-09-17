@@ -9,13 +9,13 @@
 #include <vector>
 namespace sensirion::upt::ble_auto_detection{
 
-class __attribute__((unused)) SensiScan: public BleClientCallback {
+class [[maybe_unused]] SensirionBleScanner: public BleClientCallback {
   public:
-    explicit SensiScan() : _bleClient(nullptr) {};
+    explicit SensirionBleScanner() : _bleClient(nullptr) {};
 
     void begin();
     [[maybe_unused]] void
-    getScanResults(std::map<uint16_t, std::vector<core::Measurement>>& scanResults);
+    getSamplesFromScanResults(std::map<uint16_t, std::vector<core::Measurement>>& scanResults);
     [[maybe_unused]] void keepAlive();
 
   private:

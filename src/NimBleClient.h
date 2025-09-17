@@ -8,7 +8,7 @@ namespace sensirion::upt::ble_auto_detection{
 
 class NimBleClient
     : public BleClient,
-      public NimBLEAdvertisedDeviceCallbacks {
+      public NimBLEScanCallbacks {
   public:
     NimBleClient();
     ~NimBleClient();
@@ -21,7 +21,7 @@ class NimBleClient
     BleClientCallback* _callback;
     void setupBleScans();
     void startBleScans();
-    void onResult(NimBLEAdvertisedDevice* advertisedDevice) override;
+    void onResult(const NimBLEAdvertisedDevice* advertisedDevice) override;
 };
 } // end namespace sensirion::upt::ble_auto_detection
 #endif /* SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLE_CLIENT_H */

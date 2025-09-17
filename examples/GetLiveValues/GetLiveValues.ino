@@ -22,7 +22,8 @@ void loop() {
     delay(1000);
 
     sensiScan.getScanResults(scanResults);
-    printScanResults(scanResults);
+    Serial.printf("Heap %i B \n",ESP.getFreeHeap());
+    // printScanResults(scanResults);
 
     // ensure scanning is restarted in case of errors.
     sensiScan.keepAlive();

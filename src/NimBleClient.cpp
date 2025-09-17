@@ -31,19 +31,19 @@ void NimBleClient::keepAlive() {
     }
 }
 
-void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
+void NimBleClient::onResult(const NimBLEAdvertisedDevice* advertisedDevice) {
     if (!advertisedDevice->haveManufacturerData()) {
         return;
     }
 
     // MAC address contains 6 bytes of MAC address (in reversed order)
-    const uint8_t* bleMACAddress = advertisedDevice->getAddress().getNative();
+    const ble_addr_t* bleMACAddress = advertisedDevice->getAddress().getBase();
     uint64_t address = 0;
     size_t address_size = 6;
    
     // reverse MAC address and store it as 64-bit unsigned int
     for (int ix = 0; ix < address_size; ix++) {
-        address = (address << 8) | bleMACAddress[address_size - 1 - ix];
+        address = (address << 8) | bleMACAddress->val[address_size - 1 - ix];
     }
 
     std::string name = advertisedDevice->haveName()
@@ -60,7 +60,7 @@ void NimBleClient::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
 
 void NimBleClient::setupBleScans() {
     // Activate callback on advertisement update
-    _bleScan->setAdvertisedDeviceCallbacks(this, true);
+    _bleScan->setScanCallbacks(this, true);
     // Set active scanning, this will get more data from the advertiser.
     _bleScan->setActiveScan(true);
     // How often the scan occurs / switches channels; in milliseconds,
@@ -74,6 +74,6 @@ void NimBleClient::setupBleScans() {
 void NimBleClient::startBleScans() {
     // Start scan with: duration = 0 seconds(forever), no scan end callback,
     // not a continuation of a previous scan.
-    _bleScan->start(0, nullptr, false);
+    _bleScan->start(0, false, true);
 }
 } // end namespace sensirion::upt::ble_auto_detection

@@ -25,8 +25,6 @@ void NimBleClient::begin(BleClientCallback* callback) {
 void NimBleClient::keepAlive() {
     // If an error occurs that stops the scan, it will be restarted here.
     if (!_bleScan->isScanning()) {
-        // Start scan with: duration = 0 seconds(forever), no scan end callback,
-        // not a continuation of a previous scan.
         startBleScans();
     }
 }
@@ -53,9 +51,11 @@ void NimBleClient::onResult(const NimBLEAdvertisedDevice* advertisedDevice) {
     std::string manufacturerData = advertisedDevice->getManufacturerData();
 
     _callback->onAdvertisementReceived(address, name, manufacturerData);
+}
 
-    // clear NIMBle scan results to avoid memory leak.
-    _bleScan->clearResults();
+void NimBleClient::onScanEnd(const NimBLEScanResults& results, int reason) {
+    // Restart scanning
+    startBleScans();
 }
 
 void NimBleClient::setupBleScans() {
@@ -72,8 +72,7 @@ void NimBleClient::setupBleScans() {
 }
 
 void NimBleClient::startBleScans() {
-    // Start scan with: duration = 0 seconds(forever), no scan end callback,
-    // not a continuation of a previous scan.
-    _bleScan->start(0, false, true);
+    // Start scan without keeping existing results.
+    _bleScan->start(SCAN_DURATION_MS, false, true);
 }
 } // end namespace sensirion::upt::ble_auto_detection

@@ -6,6 +6,8 @@
 
 namespace sensirion::upt::ble_auto_detection{
 
+static constexpr uint32_t SCAN_DURATION_MS = 30 * 1000; // 30 seconds scans.
+
 class NimBleClient
     : public BleClient,
       public NimBLEScanCallbacks {
@@ -22,6 +24,7 @@ class NimBleClient
     void setupBleScans();
     void startBleScans();
     void onResult(const NimBLEAdvertisedDevice* advertisedDevice) override;
+    void onScanEnd(const NimBLEScanResults& results, int reason) override;
 };
 } // end namespace sensirion::upt::ble_auto_detection
 #endif /* SENSIRION_UPT_BLE_AUTO_DETECTION_NIMBLE_CLIENT_H */

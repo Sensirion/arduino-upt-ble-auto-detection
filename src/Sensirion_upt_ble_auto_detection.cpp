@@ -21,7 +21,7 @@ void SensiScan::begin() {
     _bleClient->begin(this);
 }
 
-__attribute__((unused)) void SensiScan::getScanResults(
+__attribute__((unused)) void SensiScan::getSamplesFromScanResults(
     std::map<uint16_t, std::vector<core::Measurement>>& scanResults) {
     for (const auto& cachedSample : _sampleCache) {
         scanResults[cachedSample.first] = cachedSample.second;

@@ -21,7 +21,7 @@ void SensirionBleScanner::begin() {
     _bleClient->begin(this);
 }
 
-__attribute__((unused)) void SensirionBleScanner::getSamplesFromScanResults(
+[[maybe_unused]] void SensirionBleScanner::getSamplesFromScanResults(
     std::map<uint16_t, std::vector<core::Measurement>>& scanResults) {
     for (const auto& cachedSample : _sampleCache) {
         scanResults[cachedSample.first] = cachedSample.second;
@@ -29,7 +29,7 @@ __attribute__((unused)) void SensirionBleScanner::getSamplesFromScanResults(
     _sampleCache.clear();
 }
 
-__attribute__((unused)) void SensirionBleScanner::keepAlive() {
+[[maybe_unused]] void SensirionBleScanner::keepAlive() {
     _bleClient->keepAlive();
 }
 

@@ -16,6 +16,7 @@ void SensiScan::begin() {
     core::BLE_DIY_GADGET();
     core::HUMI_GADGET();
 
+    core::InitSampleConfigurationMapping();
     _bleClient = new NimBleClient();
     _bleClient->begin(this);
 }

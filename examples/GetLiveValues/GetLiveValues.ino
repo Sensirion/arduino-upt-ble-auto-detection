@@ -7,25 +7,25 @@ using namespace sensirion::upt::ble_auto_detection;
 void printScanResults(
     const std::map<uint16_t, std::vector<Measurement>>& scanResults);
 
-SensiScan sensiScan = SensiScan();
+SensirionBleScanner bleScanner = SensirionBleScanner();
 std::map<uint16_t, std::vector<Measurement>> lastBleScanSamples;
 
 void setup() {
     Serial.begin(115200);
     delay(1000); // Wait for serial connection
 
-    sensiScan.begin();
+    bleScanner.begin();
 }
 
 void loop() {
     delay(1000);
 
-    sensiScan.getSamplesFromScanResults(lastBleScanSamples);
+    bleScanner.getSamplesFromScanResults(lastBleScanSamples);
     printScanResults(lastBleScanSamples);
     lastBleScanSamples.clear();
 
     // ensure scanning is restarted in case of errors.
-    sensiScan.keepAlive();
+    bleScanner.keepAlive();
 }
 
 void printScanResults(

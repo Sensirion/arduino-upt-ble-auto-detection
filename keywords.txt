@@ -6,7 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-SensiScan	KEYWORD1
+SensirionBleScanner	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

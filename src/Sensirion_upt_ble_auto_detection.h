@@ -9,9 +9,9 @@
 #include <vector>
 namespace sensirion::upt::ble_auto_detection{
 
-class __attribute__((unused)) SensiScan: public BleClientCallback {
+class __attribute__((unused)) SensirionBleScanner: public BleClientCallback {
   public:
-    explicit SensiScan() : _bleClient(nullptr) {};
+    explicit SensirionBleScanner() : _bleClient(nullptr) {};
 
     void begin();
     [[maybe_unused]] void
